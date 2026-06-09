@@ -23,3 +23,14 @@ yarn-error.log*
 
 # vite cache
 .vite
+
+# Capacitor native projects (regenerate locally with `npx cap add ios|android`)
+# Remove these two lines if you want to version-control the native projects.
+/ios
+/android
+
+# Personal documents kept in this folder — NEVER publish to the public repo
+*.pptx
+*.xlsx
+*.docx
+*.pdf

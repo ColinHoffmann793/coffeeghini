@@ -77,6 +77,13 @@ h1, h2, h3 { font-family: 'Fraunces', Georgia, serif; }
 }
 .sb-right { display: flex; align-items: center; gap: 7px; }
 
+/* When installed as a PWA (home-screen, standalone): drop the mock status bar
+   and reserve the real notch/status-bar height so content isn't hidden. */
+@media (display-mode: standalone) {
+  .statusbar { display: none; }
+  .phone { padding-top: env(safe-area-inset-top); }
+}
+
 /* --------------------------------------------------------------------- main */
 .app-main {
   flex: 1;

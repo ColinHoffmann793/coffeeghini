@@ -6,10 +6,12 @@ import basicSsl from '@vitejs/plugin-basic-ssl'
 // `npm run dev:https`  -> https on :5443 (self-signed; lets the phone camera work)
 const useHttps = process.env.HTTPS === 'true'
 
-// GitHub Pages serves project sites under /<repo>/, so the production *build*
-// uses that base path. Dev keeps "/" so localhost + the preview panel work.
+// Base path resolution:
+//   - GitHub Pages project site lives under /<repo>/  -> default build base "/coffeeghini/"
+//   - Capacitor (native app) loads assets from the bundle root -> BASE_PATH=/ (npm run build:app)
+//   - dev server stays at "/"
 export default defineConfig(({ command }) => ({
-  base: command === 'build' ? '/coffeeghini/' : '/',
+  base: process.env.BASE_PATH ?? (command === 'build' ? '/coffeeghini/' : '/'),
   plugins: [react(), ...(useHttps ? [basicSsl()] : [])],
   server: {
     host: true,
