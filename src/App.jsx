@@ -1,12 +1,15 @@
 import { useEffect, useRef, useState } from 'react'
 import { CAFES, STAMP_GOAL } from './data.js'
 import { useStore } from './useStore.js'
+import { emptyFilter } from './cafeUtils.js'
 import BottomNav from './components/BottomNav.jsx'
 import Discovery from './components/Discovery.jsx'
 import Stampcard from './components/Stampcard.jsx'
 import Ratings from './components/Ratings.jsx'
 import Profile from './components/Profile.jsx'
 import QRScanner from './components/QRScanner.jsx'
+import FilterSheet from './components/FilterSheet.jsx'
+import CafeDetail from './components/CafeDetail.jsx'
 
 function resolveTargetCafe(text, state) {
   // A real QR code may encode a café id, e.g. "coffeeghini:aurora".
@@ -54,6 +57,9 @@ export default function App() {
   const [scannerOpen, setScannerOpen] = useState(false)
   const [toast, setToast] = useState(null)
   const [justAdded, setJustAdded] = useState({ cafeId: null, index: -1 })
+  const [filter, setFilter] = useState(emptyFilter)
+  const [filterOpen, setFilterOpen] = useState(false)
+  const [detailId, setDetailId] = useState(null)
   const toastTimer = useRef(null)
   const popTimer = useRef(null)
   const mainRef = useRef(null)
@@ -96,7 +102,14 @@ export default function App() {
         <StatusBar />
 
         <main className="app-main" ref={mainRef}>
-          {tab === 'discovery' && <Discovery ratings={store.state.ratings} />}
+          {tab === 'discovery' && (
+            <Discovery
+              ratings={store.state.ratings}
+              filter={filter}
+              onOpenFilter={() => setFilterOpen(true)}
+              onOpenCafe={setDetailId}
+            />
+          )}
           {tab === 'stampcard' && <Stampcard store={store} justAdded={justAdded} />}
           {tab === 'ratings' && <Ratings store={store} />}
           {tab === 'profile' && <Profile store={store} />}
@@ -105,6 +118,23 @@ export default function App() {
         {toast && <div className="toast" key={toast}>{toast}</div>}
 
         <BottomNav active={tab} onChange={setTab} onScan={() => setScannerOpen(true)} />
+
+        <FilterSheet
+          open={filterOpen}
+          value={filter}
+          onChange={setFilter}
+          onClose={() => setFilterOpen(false)}
+          preferences={store.state.preferences}
+        />
+
+        {detailId && (
+          <CafeDetail
+            cafe={CAFES.find((c) => c.id === detailId)}
+            store={store}
+            onClose={() => setDetailId(null)}
+            onScan={() => { setDetailId(null); setScannerOpen(true) }}
+          />
+        )}
 
         {scannerOpen && (
           <QRScanner onResult={handleScanResult} onClose={() => setScannerOpen(false)} />

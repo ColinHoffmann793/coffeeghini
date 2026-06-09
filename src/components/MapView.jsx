@@ -8,7 +8,7 @@ import ImageCarousel from './ImageCarousel.jsx'
 const cupSvg =
   '<svg viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 9h11v5a4 4 0 0 1-4 4H9a4 4 0 0 1-4-4z"/><path d="M16 10h2.5a2.5 2.5 0 0 1 0 5H16"/><path d="M8 3c0 1-1 1-1 2.2M11.5 3c0 1-1 1-1 2.2"/></svg>'
 
-export default function MapView({ cafes = CAFES, ratings = {} }) {
+export default function MapView({ cafes = CAFES, ratings = {}, onOpenCafe }) {
   const elRef = useRef(null)
   const mapRef = useRef(null)
   const markersRef = useRef({})
@@ -86,7 +86,7 @@ export default function MapView({ cafes = CAFES, ratings = {} }) {
           <div className="map-card-thumb">
             <ImageCarousel images={[selected.images[0]]} accent={selected.accent} height={92} />
           </div>
-          <div className="map-card-body">
+          <div className="map-card-body tappable" onClick={() => onOpenCafe?.(selected.id)}>
             <div className="cafe-head">
               <div>
                 <h3 className="cafe-name" style={{ fontSize: 18 }}>{selected.name}</h3>
@@ -102,6 +102,7 @@ export default function MapView({ cafes = CAFES, ratings = {} }) {
             <div className="map-card-signature" style={{ '--accent': selected.accent }}>
               <Icon.Cup width="14" height="14" /> Signature · {selected.coffee.signature}
             </div>
+            <span className="card-more">View details <Icon.ChevronLeft width="14" height="14" style={{ transform: 'rotate(180deg)' }} /></span>
           </div>
         </div>
       )}
