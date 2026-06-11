@@ -58,6 +58,10 @@ export default function CafeDetail({ cafe, store, onClose, onScan }) {
             {cafe.tags.map((t) => <span key={t} className="cat-chip">{t}</span>)}
           </div>
 
+          {cafe.coworking && (
+            <div className="cowork-badge"><Icon.Laptop width="15" height="15" /> Good for working · Wi-Fi &amp; power</div>
+          )}
+
           {/* open status + collapsible hours */}
           <button
             className={`status-card ${status.open ? 'open' : 'closed'}`}

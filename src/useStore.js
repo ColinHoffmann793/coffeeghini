@@ -27,6 +27,7 @@ const defaultState = {
     roast: 'Light',
     milk: 'Oat',
     strength: 'Balanced',
+    coworking: true,
     notes: 'Love fruity Ethiopians. Not a fan of anything too bitter.',
   },
 }

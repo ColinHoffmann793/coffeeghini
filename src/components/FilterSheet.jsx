@@ -1,6 +1,7 @@
 import { CAFES, FILTER_GROUPS } from '../data.js'
 import { Icon } from '../icons.jsx'
 import { matchesFilter, countFilters, prefsToFilter, emptyFilter } from '../cafeUtils.js'
+import Toggle from './Toggle.jsx'
 
 export default function FilterSheet({ open, value, onChange, onClose, preferences }) {
   if (!open) return null
@@ -32,6 +33,16 @@ export default function FilterSheet({ open, value, onChange, onClose, preference
           <Icon.Sparkle width="16" height="16" /> Match my taste
           <span>from your profile</span>
         </button>
+
+        <div className="sheet-cowork">
+          <Toggle
+            on={!!value.coworking}
+            onChange={(v) => onChange({ ...value, coworking: v })}
+            label="Good for coworking"
+            desc="Wi-Fi, power & space to work"
+            icon={Icon.Laptop}
+          />
+        </div>
 
         <div className="sheet-body">
           {FILTER_GROUPS.map((g) => (

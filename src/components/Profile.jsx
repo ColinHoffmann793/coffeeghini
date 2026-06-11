@@ -1,6 +1,7 @@
 import { useState } from 'react'
 import { PREFERENCE_OPTIONS } from '../data.js'
 import { Icon } from '../icons.jsx'
+import Toggle from './Toggle.jsx'
 
 function Segmented({ label, options, value, onChange }) {
   return (
@@ -121,6 +122,21 @@ export default function Profile({ store }) {
               onChange={(e) => updatePreferences({ notes: e.target.value })}
             />
           </div>
+        </section>
+
+        <section className="card-section">
+          <div className="section-title">
+            <Icon.Laptop width="18" height="18" />
+            <h3>Coworking</h3>
+          </div>
+          <p className="section-sub">Prefer cafés you can actually work from? We'll surface them.</p>
+          <Toggle
+            on={!!preferences.coworking}
+            onChange={(v) => updatePreferences({ coworking: v })}
+            label="Coworking-friendly cafés"
+            desc="Wi-Fi, power outlets & space to settle in"
+            icon={Icon.Laptop}
+          />
         </section>
 
         <button className="btn-reset" onClick={() => { if (confirm('Reset all demo data?')) resetAll() }}>

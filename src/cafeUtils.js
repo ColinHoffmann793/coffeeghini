@@ -51,15 +51,18 @@ export function matchesFilter(cafe, filter) {
       if (!sel.some((s) => have.includes(s))) return false
     }
   }
+  if (filter.coworking && !cafe.coworking) return false
   return true
 }
 
-export const emptyFilter = () =>
-  FILTER_GROUPS.reduce((acc, g) => ({ ...acc, [g.key]: [] }), {})
+export const emptyFilter = () => ({
+  ...FILTER_GROUPS.reduce((acc, g) => ({ ...acc, [g.key]: [] }), {}),
+  coworking: false,
+})
 
 export function countFilters(filter) {
   if (!filter) return 0
-  return FILTER_GROUPS.reduce((n, g) => n + (filter[g.key]?.length || 0), 0)
+  return FILTER_GROUPS.reduce((n, g) => n + (filter[g.key]?.length || 0), 0) + (filter.coworking ? 1 : 0)
 }
 
 // Build a filter from the user's saved profile "personal taste".
@@ -69,6 +72,7 @@ export function prefsToFilter(prefs = {}) {
     roasts: prefs.roast ? [prefs.roast] : [],
     milks: prefs.milk && prefs.milk !== 'None' ? [prefs.milk] : [],
     strengths: prefs.strength ? [prefs.strength] : [],
+    coworking: !!prefs.coworking,
   }
 }
 
