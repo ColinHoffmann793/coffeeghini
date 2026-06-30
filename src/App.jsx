@@ -5,11 +5,12 @@ import { emptyFilter } from './cafeUtils.js'
 import BottomNav from './components/BottomNav.jsx'
 import Discovery from './components/Discovery.jsx'
 import Stampcard from './components/Stampcard.jsx'
-import Ratings from './components/Ratings.jsx'
+import Social from './components/Social.jsx'
 import Profile from './components/Profile.jsx'
 import QRScanner from './components/QRScanner.jsx'
 import FilterSheet from './components/FilterSheet.jsx'
 import CafeDetail from './components/CafeDetail.jsx'
+import ScanConfirm from './components/ScanConfirm.jsx'
 
 function resolveTargetCafe(text, state) {
   // A real QR code may encode a café id, e.g. "coffeeghini:aurora".
@@ -55,12 +56,11 @@ export default function App() {
   const store = useStore()
   const [tab, setTab] = useState('discovery')
   const [scannerOpen, setScannerOpen] = useState(false)
-  const [toast, setToast] = useState(null)
+  const [scanResult, setScanResult] = useState(null)
   const [justAdded, setJustAdded] = useState({ cafeId: null, index: -1 })
   const [filter, setFilter] = useState(emptyFilter)
   const [filterOpen, setFilterOpen] = useState(false)
   const [detailId, setDetailId] = useState(null)
-  const toastTimer = useRef(null)
   const popTimer = useRef(null)
   const mainRef = useRef(null)
 
@@ -69,32 +69,33 @@ export default function App() {
     mainRef.current?.scrollTo({ top: 0 })
   }, [tab])
 
-  const showToast = (msg) => {
-    setToast(msg)
-    clearTimeout(toastTimer.current)
-    toastTimer.current = setTimeout(() => setToast(null), 2600)
-  }
-
   const handleScanResult = (text) => {
     const cafeId = resolveTargetCafe(text, store.state)
     const cafe = CAFES.find((c) => c.id === cafeId)
     const before = store.state.stamps[cafeId] || 0
 
     if (before >= STAMP_GOAL) {
-      showToast(`${cafe.name} card is full — tap Redeem!`)
-      setTab('stampcard')
+      setScanResult({ cafeId, cafeName: cafe.name, accent: cafe.accent, count: before, index: -1, complete: true, alreadyFull: true })
       return
     }
     store.addStamp(cafeId)
-    setTab('stampcard')
-    setJustAdded({ cafeId, index: before })
-    clearTimeout(popTimer.current)
-    popTimer.current = setTimeout(() => setJustAdded({ cafeId: null, index: -1 }), 900)
     const next = before + 1
-    showToast(next >= STAMP_GOAL ? `🎉 ${cafe.name} complete — free coffee!` : `+1 stamp · ${cafe.name} (${next}/${STAMP_GOAL})`)
+    setScanResult({ cafeId, cafeName: cafe.name, accent: cafe.accent, count: next, index: before, complete: next >= STAMP_GOAL, alreadyFull: false })
   }
 
-  useEffect(() => () => { clearTimeout(toastTimer.current); clearTimeout(popTimer.current) }, [])
+  // Dismissing the confirmation pop-up is what advances to the stamp card.
+  const dismissScan = () => {
+    const r = scanResult
+    setScanResult(null)
+    setTab('stampcard')
+    if (r && !r.alreadyFull) {
+      setJustAdded({ cafeId: r.cafeId, index: r.index })
+      clearTimeout(popTimer.current)
+      popTimer.current = setTimeout(() => setJustAdded({ cafeId: null, index: -1 }), 900)
+    }
+  }
+
+  useEffect(() => () => clearTimeout(popTimer.current), [])
 
   return (
     <div className="app-shell">
@@ -110,12 +111,10 @@ export default function App() {
               onOpenCafe={setDetailId}
             />
           )}
-          {tab === 'stampcard' && <Stampcard store={store} justAdded={justAdded} />}
-          {tab === 'ratings' && <Ratings store={store} />}
+          {tab === 'stampcard' && <Stampcard store={store} justAdded={justAdded} onOpenCafe={setDetailId} />}
+          {tab === 'social' && <Social store={store} onOpenCafe={setDetailId} />}
           {tab === 'profile' && <Profile store={store} />}
         </main>
-
-        {toast && <div className="toast" key={toast}>{toast}</div>}
 
         <BottomNav active={tab} onChange={setTab} onScan={() => setScannerOpen(true)} />
 
@@ -139,6 +138,8 @@ export default function App() {
         {scannerOpen && (
           <QRScanner onResult={handleScanResult} onClose={() => setScannerOpen(false)} />
         )}
+
+        <ScanConfirm result={scanResult} onClose={dismissScan} />
       </div>
     </div>
   )

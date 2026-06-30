@@ -5,7 +5,7 @@ const LEFT = [
   { id: 'stampcard', label: 'Stampcard', icon: Icon.Stamp },
 ]
 const RIGHT = [
-  { id: 'ratings', label: 'Ratings', icon: Icon.Ratings },
+  { id: 'social', label: 'Social', icon: Icon.Users },
   { id: 'profile', label: 'Profile', icon: Icon.Profile },
 ]
 

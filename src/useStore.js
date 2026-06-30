@@ -30,6 +30,8 @@ const defaultState = {
     coworking: true,
     notes: 'Love fruity Ethiopians. Not a fan of anything too bitter.',
   },
+  // event ids the user has RSVP'd to (Social tab)
+  rsvps: {},
 }
 
 function load() {
@@ -45,6 +47,7 @@ function load() {
       stamps: { ...parsed.stamps },
       redeemed: { ...parsed.redeemed },
       ratings: { ...parsed.ratings },
+      rsvps: { ...parsed.rsvps },
     }
   } catch {
     return defaultState
@@ -121,6 +124,10 @@ export function useStore() {
     setState((s) => ({ ...s, profile: { ...s.profile, ...patch } }))
   }, [])
 
+  const toggleRsvp = useCallback((eventId) => {
+    setState((s) => ({ ...s, rsvps: { ...s.rsvps, [eventId]: !s.rsvps[eventId] } }))
+  }, [])
+
   const resetAll = useCallback(() => setState(defaultState), [])
 
   // derived helpers
@@ -138,6 +145,7 @@ export function useStore() {
     updatePreferences,
     toggleDrink,
     updateProfile,
+    toggleRsvp,
     resetAll,
     derived: {
       visitedCafes,

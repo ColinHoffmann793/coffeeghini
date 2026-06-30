@@ -232,9 +232,9 @@ export const CAFES = [
     milks: ['Whole', 'Oat', 'Almond'],
     strengths: ['Mild', 'Balanced', 'Strong'],
     images: [
-      img('1453614512568-c4024d13c247'),
-      img('1442512595331-e89e73853f31'),
-      img('1501339847302-ac426a4a7cbb'),
+      img('1498804103079-a6351b050096'),
+      img('1485808191679-5f86510681a2'),
+      img('1511920170033-f8396924c348'),
     ],
     about:
       'A specialty roaster and brew bar focused on traceable single origins. Beans roasted nearby, refractometers on the bar and staff happy to nerd out over extraction.',
@@ -246,5 +246,50 @@ export const CAFES = [
       signature: 'Filter flight',
       notes: ['Stone fruit', 'Honey', 'Tea-like'],
     },
+  },
+]
+
+// Café-hosted community events for the Social tab. `daysFromNow` keeps them
+// always upcoming in the demo; the UI formats the actual date.
+export const EVENTS = [
+  {
+    id: 'dj-woyton', cafeId: 'woyton', type: 'DJ Session', emoji: '🎧',
+    title: 'Friday Night DJ Session', daysFromNow: 1, time: '19:00 – 23:00', attending: 42,
+    description: 'Wind down the week with vinyl sets from local DJs, signature cold brews and a buzzing crowd.',
+  },
+  {
+    id: 'read-hej', cafeId: 'hej', type: 'Reading', emoji: '📚',
+    title: 'Silent Book Club', daysFromNow: 3, time: '10:00 – 12:00', attending: 18,
+    description: 'Bring a book, grab a filter coffee and read in good company — no pressure to talk, just cosy focus.',
+  },
+  {
+    id: 'latte-pure', cafeId: 'pureorigins', type: 'Latte Art', emoji: '🎨',
+    title: 'Latte Art Throwdown', daysFromNow: 5, time: '18:30 – 21:00', attending: 31,
+    description: 'Watch baristas battle for the cleanest rosetta — or step up and pour your own. Beginners welcome.',
+  },
+  {
+    id: 'speed-huftgold', cafeId: 'huftgold', type: 'Speed Dating', emoji: '💛',
+    title: 'Coffee & Speed Dating', daysFromNow: 6, time: '19:30 – 22:00', attending: 24,
+    description: 'Five-minute chats over cake and cortados. Singles 25–38 — sign-up required at the counter.',
+  },
+  {
+    id: 'brew-pure', cafeId: 'pureorigins', type: 'Workshop', emoji: '⚗️',
+    title: 'Home Brewing Workshop', daysFromNow: 8, time: '11:00 – 13:00', attending: 12,
+    description: 'Dial in the perfect V60 at home — learn grind, ratio and pour technique with our head roaster.',
+  },
+  {
+    id: 'games-knulle', cafeId: 'knulle', type: 'Games', emoji: '🎲',
+    title: 'Board Game Brunch', daysFromNow: 9, time: '10:00 – 14:00', attending: 27,
+    description: 'Sunday brunch meets a wall of board games. Pull up a chair — the game catalogue is on the house.',
+  },
+  {
+    id: 'lang-hej', cafeId: 'hej', type: 'Meetup', emoji: '💬',
+    title: 'Language Café (DE / EN)', daysFromNow: 11, time: '18:00 – 20:00', attending: 36,
+    description: 'Swap German and English over coffee. All levels — friendly tables grouped by language and topic.',
+  },
+  {
+    id: 'tasting-heinemann', cafeId: 'heinemann', type: 'Tasting', emoji: '🍰',
+    title: 'Pâtisserie Pairing Evening', daysFromNow: 13, time: '19:00 – 21:00', attending: 20,
+    description: 'A guided tasting of signature pralinés paired with single-origin espresso. Limited seats.',
   },
 ]

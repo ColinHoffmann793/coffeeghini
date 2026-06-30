@@ -13,10 +13,11 @@ export default function QRScanner({ onResult, onClose }) {
   const finish = (text) => {
     if (handledRef.current) return
     handledRef.current = true
-    setStatus('done')
+    // Stop the camera, then hand the result up — App shows a confirmation
+    // pop-up that the user must dismiss before anything else happens.
     stop().finally(() => {
       onResult(text)
-      setTimeout(onClose, 450)
+      onClose()
     })
   }
 

@@ -85,3 +85,11 @@ export const mapsLink = (cafe) =>
   )}`
 
 export const priceLabel = (price = 0) => '€'.repeat(Math.max(1, price))
+
+export function formatEventDate(daysFromNow, now = new Date()) {
+  if (daysFromNow <= 0) return 'Today'
+  if (daysFromNow === 1) return 'Tomorrow'
+  const d = new Date(now)
+  d.setDate(d.getDate() + daysFromNow)
+  return d.toLocaleDateString('en-GB', { weekday: 'short', day: 'numeric', month: 'short' })
+}
