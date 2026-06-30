@@ -1,5 +1,5 @@
 import { useEffect, useRef, useState } from 'react'
-import { CAFES, STAMP_GOAL } from './data.js'
+import { CAFES, EVENTS, STAMP_GOAL } from './data.js'
 import { useStore } from './useStore.js'
 import { emptyFilter } from './cafeUtils.js'
 import BottomNav from './components/BottomNav.jsx'
@@ -10,6 +10,7 @@ import Profile from './components/Profile.jsx'
 import QRScanner from './components/QRScanner.jsx'
 import FilterSheet from './components/FilterSheet.jsx'
 import CafeDetail from './components/CafeDetail.jsx'
+import EventDetail from './components/EventDetail.jsx'
 import ScanConfirm from './components/ScanConfirm.jsx'
 
 function resolveTargetCafe(text, state) {
@@ -61,6 +62,7 @@ export default function App() {
   const [filter, setFilter] = useState(emptyFilter)
   const [filterOpen, setFilterOpen] = useState(false)
   const [detailId, setDetailId] = useState(null)
+  const [eventId, setEventId] = useState(null)
   const popTimer = useRef(null)
   const mainRef = useRef(null)
 
@@ -97,6 +99,8 @@ export default function App() {
 
   useEffect(() => () => clearTimeout(popTimer.current), [])
 
+  const openEvent = eventId ? EVENTS.find((e) => e.id === eventId) : null
+
   return (
     <div className="app-shell">
       <div className="phone">
@@ -112,7 +116,7 @@ export default function App() {
             />
           )}
           {tab === 'stampcard' && <Stampcard store={store} justAdded={justAdded} onOpenCafe={setDetailId} />}
-          {tab === 'social' && <Social store={store} onOpenCafe={setDetailId} />}
+          {tab === 'social' && <Social store={store} onOpenCafe={setDetailId} onOpenEvent={setEventId} />}
           {tab === 'profile' && <Profile store={store} />}
         </main>
 
@@ -132,6 +136,16 @@ export default function App() {
             store={store}
             onClose={() => setDetailId(null)}
             onScan={() => { setDetailId(null); setScannerOpen(true) }}
+          />
+        )}
+
+        {openEvent && (
+          <EventDetail
+            event={openEvent}
+            cafe={CAFES.find((c) => c.id === openEvent.cafeId)}
+            store={store}
+            onClose={() => setEventId(null)}
+            onOpenCafe={(id) => { setEventId(null); setDetailId(id) }}
           />
         )}
 
