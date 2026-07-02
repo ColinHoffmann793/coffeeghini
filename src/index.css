@@ -878,6 +878,8 @@ h1, h2, h3 { font-family: 'Fraunces', Georgia, serif; }
 .rsvp-lg:active { transform: scale(0.98); }
 .rsvp-lg.going { background: color-mix(in srgb, var(--accent) 22%, var(--foam)); color: var(--espresso); }
 
+.detail-events { display: flex; flex-direction: column; gap: 14px; }
+
 /* ------------------------------------------------------------ scan confirm */
 .confirm-overlay {
   position: absolute; inset: 0; z-index: 100;

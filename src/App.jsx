@@ -136,6 +136,7 @@ export default function App() {
             store={store}
             onClose={() => setDetailId(null)}
             onScan={() => { setDetailId(null); setScannerOpen(true) }}
+            onOpenEvent={(id) => { setDetailId(null); setEventId(id) }}
           />
         )}
 

@@ -2,7 +2,8 @@ import { useState } from 'react'
 import { Icon } from '../icons.jsx'
 import ImageCarousel from './ImageCarousel.jsx'
 import StarRating from './StarRating.jsx'
-import { CITY, STAMP_GOAL } from '../data.js'
+import EventCard from './EventCard.jsx'
+import { CITY, STAMP_GOAL, EVENTS } from '../data.js'
 import { getOpenStatus, formatHours, formatAddress, mapsLink, priceLabel } from '../cafeUtils.js'
 
 function InfoRow({ icon: Ico, children, href }) {
@@ -19,7 +20,7 @@ function InfoRow({ icon: Ico, children, href }) {
   )
 }
 
-export default function CafeDetail({ cafe, store, onClose, onScan }) {
+export default function CafeDetail({ cafe, store, onClose, onScan, onOpenEvent }) {
   const [showHours, setShowHours] = useState(false)
   if (!cafe) return null
 
@@ -30,6 +31,8 @@ export default function CafeDetail({ cafe, store, onClose, onScan }) {
   const stamps = store.state.stamps[cafe.id] || 0
   const redeemed = store.state.redeemed[cafe.id] || 0
   const visited = stamps > 0 || redeemed > 0
+  const now = new Date()
+  const cafeEvents = EVENTS.filter((e) => e.cafeId === cafe.id).sort((a, b) => a.daysFromNow - b.daysFromNow)
 
   return (
     <div className="detail" role="dialog" aria-label={cafe.name}>
@@ -135,6 +138,18 @@ export default function CafeDetail({ cafe, store, onClose, onScan }) {
             <StarRating value={rating?.stars || 0} size={30} onChange={(n) => store.setRating(cafe.id, n)} />
             {rating?.note && <p className="rating-note">“{rating.note}”</p>}
           </div>
+
+          {/* upcoming events at this café — same cards as the Social tab */}
+          {cafeEvents.length > 0 && (
+            <div className="detail-section">
+              <h3 className="detail-h3">Upcoming events</h3>
+              <div className="detail-events">
+                {cafeEvents.map((ev) => (
+                  <EventCard key={ev.id} event={ev} store={store} onOpen={onOpenEvent} now={now} />
+                ))}
+              </div>
+            </div>
+          )}
 
           <p className="feed-end">coffeeghini · {CITY.name}</p>
         </div>
